@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SYAC.Ventas.BLL\SYAC.Ventas.BLL.csproj" />
+    <ProjectReference Include="..\SYAC.Ventas.DAL\SYAC.Ventas.DAL.csproj" />
+  </ItemGroup>
+
+</Project>
