@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SYAC.Ventas.DAL.ViewModels
 {
+    /// <summary>
+    /// Viewmodel de detalle de orden
+    /// </summary>
     public class OrdenPedidoDetalleViewModel
     {
         public int Id { get; set; }

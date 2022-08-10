@@ -59,7 +59,10 @@ namespace SYAC.Ventas.BLL.DAO
         {
             _context = context;
         }
-
+        /// <summary>
+        /// Obtiene todas las ordenes
+        /// </summary>
+        /// <returns></returns>
         public List<OrdenPedidoViewModel> Get()
         {
             var ordenes = _context.GetAllOrdenes().Select(i => new OrdenPedidoViewModel() {
@@ -73,7 +76,10 @@ namespace SYAC.Ventas.BLL.DAO
 
             return ordenes;
         }
-
+        /// <summary>
+        /// obtiene todos los productos
+        /// </summary>
+        /// <returns></returns>
         public List<ProductoViewModel> GetProducts()
         {
             var ordenes = _context.Productos.Select(i => new ProductoViewModel()
@@ -87,7 +93,11 @@ namespace SYAC.Ventas.BLL.DAO
 
             return ordenes;
         }
-
+        /// <summary>
+        /// /Obtiene la orden con respecto al id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public OrdenPedidoViewModel GetbyId(int id)
         {
             OrdenPedidoViewModel lstOrdenes = new OrdenPedidoViewModel();
@@ -112,7 +122,12 @@ namespace SYAC.Ventas.BLL.DAO
             }).ToList();
             return lstOrdenes;
         }
-
+        /// <summary>
+        /// Actualiza el estado de la orden
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="estado"></param>
+        /// <returns></returns>
         public bool Update(int id,string estado)
         {
             bool result = false; 
@@ -123,7 +138,11 @@ namespace SYAC.Ventas.BLL.DAO
             result = true;
             return result;
         }
-
+        /// <summary>
+        /// Crea o actualiza una orden
+        /// </summary>
+        /// <param name="orden"></param>
+        /// <returns></returns>
         public bool UpdateOrCreate(OrdenPedidoViewModel orden)
         {
             OrdenPedido oOrdenPedido = new OrdenPedido();

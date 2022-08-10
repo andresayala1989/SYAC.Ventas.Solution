@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SYAC.Ventas.BLL.DAO
 {
+    /// <summary>
+    /// Clase de Clientes
+    /// </summary>
     public class ClienteDAO
     {
         #region Singleton
@@ -58,7 +61,10 @@ namespace SYAC.Ventas.BLL.DAO
         {
             _context = context;
         }
-
+        /// <summary>
+        /// Obtiene los clientes
+        /// </summary>
+        /// <returns></returns>
         public List<ClienteViewModel> Get()
         {
             var clientes = _context.Clientes.Select(i => new ClienteViewModel() {

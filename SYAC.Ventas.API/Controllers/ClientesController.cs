@@ -11,7 +11,11 @@ namespace SYAC.Ventas.API.Controllers
     [Route("api/Clientes/Get", Name = "ClientesApi")]
     public class ClientesController : ApiController
     {
-
+        /// <summary>
+        /// Obtiene todos los clientes
+        /// </summary>
+        /// <param name="loadOptions"></param>
+        /// <returns></returns>
         [HttpGet]
         public List<ClienteViewModel> Get(DataSourceLoadOptions loadOptions) {
             List<ClienteViewModel> lstCliente = new List<ClienteViewModel>();

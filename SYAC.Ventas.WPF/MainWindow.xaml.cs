@@ -24,8 +24,6 @@ namespace SYAC.Ventas.WPF
     public partial class MainWindow : Window
     {
         
-        //Product NewProduct = new Product();
-        //Product selectedProduct = new Product();
         public MainWindow()
         {
 
@@ -33,12 +31,18 @@ namespace SYAC.Ventas.WPF
             GetOrders();
             GetProducts();
             GetClients();
-                //NewProductGrid.DataContext = NewProduct;
+                
         }
+        /// <summary>
+        /// Trae todas las ordenes
+        /// </summary>
         private void GetOrders()
         {
             OrdenDG.ItemsSource = OrdenesDAO.Instance.Get().ToList();
         }
+        /// <summary>
+        /// Obtiene todos los clientes
+        /// </summary>
         private void GetClients()
         {
             List<ClienteViewModel> lstCliente = ClienteDAO.Instance.Get().ToList();
@@ -47,13 +51,18 @@ namespace SYAC.Ventas.WPF
             this.cmbCountryList.ItemsSource = lstCliente;
             this.cmbCountryList.Text = "Escoger Cliente";
         }
-
+        /// <summary>
+        /// Obtiene todos los productos
+        /// </summary>
         private void GetProducts()
         {
             List<ProductoViewModel> lstProducts = OrdenesDAO.Instance.GetProducts().ToList();
             ProductsAdd.ItemsSource = lstProducts;
         }
-
+        /// <summary>
+        /// Obtiene la orden con el respectivo id
+        /// </summary>
+        /// <param name="id"></param>
         public void GetAllOrder(int id)
         {
             OrdenPedidoViewModel lstOrder = OrdenesDAO.Instance.GetbyId(id);
@@ -78,6 +87,11 @@ namespace SYAC.Ventas.WPF
             }
             ProductsEdit.ItemsSource = lstProducts;
         }
+        /// <summary>
+        /// Almacena las nuevas ordenes
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="e"></param>
         private void AddItem(object s, RoutedEventArgs e)
         {
             OrdenPedidoViewModel oOrdenPedido = new OrdenPedidoViewModel();
@@ -111,6 +125,11 @@ namespace SYAC.Ventas.WPF
             }
             GetOrders();
         }
+        /// <summary>
+        /// Actualiza las ordenes
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="e"></param>
         private void UpdateItem(object s, RoutedEventArgs e)
         {
             OrdenPedidoViewModel oOrdenPedido = new OrdenPedidoViewModel();
@@ -147,6 +166,7 @@ namespace SYAC.Ventas.WPF
             }
             GetOrders();
         }
+
         private void SelectProductToEdit(object s, RoutedEventArgs e)
         {
             GetAllOrder(((SYAC.Ventas.DAL.ViewModels.OrdenPedidoViewModel)OrdenDG.SelectedItem).Id);
