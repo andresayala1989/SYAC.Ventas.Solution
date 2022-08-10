@@ -18,5 +18,6 @@ namespace SYAC.Ventas.DAL.ViewModels
         public bool Estado { get; set; }
 
         public string EstadoPedido { get; set; }
+        public List<OrdenPedidoDetalleViewModel> lstOrdenPedidoDetalle { get; set; }
     }
 }

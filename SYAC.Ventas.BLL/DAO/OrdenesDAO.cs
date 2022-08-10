@@ -2,6 +2,7 @@
 using SYAC.Ventas.DAL.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,7 +62,7 @@ namespace SYAC.Ventas.BLL.DAO
 
         public List<OrdenPedidoViewModel> Get()
         {
-            var clientes = _context.GetAllOrdenes().Select(i => new OrdenPedidoViewModel() {
+            var ordenes = _context.GetAllOrdenes().Select(i => new OrdenPedidoViewModel() {
                 Id = i.Id,
                 Prioridad = i.Prioridad,
                 Cliente = i.Nombre,
@@ -70,10 +71,127 @@ namespace SYAC.Ventas.BLL.DAO
                 FechaRegistro = i.FechaRegistro
             }).ToList();
 
-            return clientes;
+            return ordenes;
         }
 
+        public List<ProductoViewModel> GetProducts()
+        {
+            var ordenes = _context.Productos.Select(i => new ProductoViewModel()
+            {
+                Id = i.Id,
+                Nombre = i.Nombre,
+                Codigo = i.Codigo,
+                Estado = i.Estado,
+                ValorUnitario = i.ValorUnitario
+            }).ToList();
 
+            return ordenes;
+        }
+
+        public OrdenPedidoViewModel GetbyId(int id)
+        {
+            OrdenPedidoViewModel lstOrdenes = new OrdenPedidoViewModel();
+            lstOrdenes = _context.OrdenPedido.Where(x => x.Estado == true && x.Id == id).Select(i => new OrdenPedidoViewModel()
+            {
+                Id = i.Id,
+                Prioridad = i.Prioridad,
+                IdCliente = i.IdCliente,
+                ValorTotal = i.ValorTotal,
+                DireccionEntrega = i.DireccionEntrega,
+                FechaRegistro = i.FechaRegistro
+            }).FirstOrDefault();
+            lstOrdenes.lstOrdenPedidoDetalle = new List<OrdenPedidoDetalleViewModel>();
+            lstOrdenes.lstOrdenPedidoDetalle = _context.GetAllProducts().Where(x => x.IdOrdenPedido == id).Select(i => new OrdenPedidoDetalleViewModel{
+            Id = i.Id,
+            Cantidad = i.Cantidad,
+            IdOrdenPedido = i.IdOrdenPedido,
+            Estado = i.Estado ,
+            IdProducto = i.IdProducto,
+            ValorParcial = i.ValorParcial,
+            Producto = i.Nombre
+            }).ToList();
+            return lstOrdenes;
+        }
+
+        public bool Update(int id,string estado)
+        {
+            bool result = false; 
+            var oOrden = _context.OrdenPedido.Where(x => x.Id == id).FirstOrDefault();
+            oOrden.EstadoPedido = estado;
+            _context.Entry(oOrden).State = EntityState.Modified;
+            _context.SaveChanges();
+            result = true;
+            return result;
+        }
+
+        public bool UpdateOrCreate(OrdenPedidoViewModel orden)
+        {
+            OrdenPedido oOrdenPedido = new OrdenPedido();
+            oOrdenPedido.IdCliente = orden.IdCliente;
+            bool result = false;
+            if (orden.Id != 0)
+            {
+                oOrdenPedido = _context.OrdenPedido.Where(x => x.Id == orden.Id).FirstOrDefault();
+            } else
+            {
+                oOrdenPedido.FechaRegistro = DateTime.Now;
+                Clientes oCliente = _context.Clientes.Where(x => x.Id == orden.IdCliente).FirstOrDefault();
+                oOrdenPedido.DireccionEntrega = oCliente.Direccion;
+            }
+            
+            oOrdenPedido.EstadoPedido = "Registrado";
+            oOrdenPedido.Estado = true;
+            
+            decimal ValorTotal = 0;
+
+            foreach (var item in orden.lstOrdenPedidoDetalle)
+            {
+                Productos oProducto = _context.Productos.Where(x => x.Id == item.IdProducto).FirstOrDefault();
+                ValorTotal += (oProducto.ValorUnitario * item.Cantidad);
+            }
+            if(ValorTotal <= 500)
+            {
+                oOrdenPedido.Prioridad = "Baja";
+            } else if(ValorTotal > 500 && ValorTotal <= 1000)
+            {
+                oOrdenPedido.Prioridad = "Media";
+            }
+            else
+            {
+                oOrdenPedido.Prioridad = "Alta";
+            }
+            oOrdenPedido.ValorTotal = ValorTotal;
+            if (orden.Id != 0)
+            {
+                _context.Entry(oOrdenPedido).State = EntityState.Modified;
+                var lstDetalle = _context.OrdenPedidoDetalle.Where(x => x.IdOrdenPedido == orden.Id).ToList();
+                lstDetalle.ForEach(x => x.Estado = false);
+            } else
+            {
+                _context.OrdenPedido.Add(oOrdenPedido);
+            }
+            _context.SaveChanges();
+
+            
+
+            foreach (var item in orden.lstOrdenPedidoDetalle)
+            {
+                Productos oProducto = _context.Productos.Where(x => x.Id == item.IdProducto).FirstOrDefault();
+                
+                OrdenPedidoDetalle oPedidoDetalle = new OrdenPedidoDetalle();
+                oPedidoDetalle.Cantidad = item.Cantidad;
+                oPedidoDetalle.IdOrdenPedido = oOrdenPedido.Id;
+                oPedidoDetalle.IdProducto = item.IdProducto;
+                oPedidoDetalle.Estado = true;
+                oPedidoDetalle.ValorParcial = oProducto.ValorUnitario * item.Cantidad;
+                _context.OrdenPedidoDetalle.Add(oPedidoDetalle);
+                _context.SaveChanges();
+            }
+
+            
+            result = true;
+            return result;
+        }
 
     }
 }

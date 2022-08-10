@@ -14,5 +14,7 @@ namespace SYAC.Ventas.DAL.ViewModels
         public int Cantidad { get; set; }
         public decimal ValorParcial { get; set; }
         public bool Estado { get; set; }
+
+        public string Producto { get; set; }    
     }
 }

@@ -37,5 +37,10 @@ namespace SYAC.Ventas.BLL.Model
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAllOrdenes_Result>("GetAllOrdenes");
         }
+    
+        public virtual ObjectResult<GetAllProducts_Result> GetAllProducts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAllProducts_Result>("GetAllProducts");
+        }
     }
 }

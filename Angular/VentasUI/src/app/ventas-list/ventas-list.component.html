@@ -1,0 +1,65 @@
+<hr>  
+    <div *ngIf="!dataavailbale">  
+        <h4> No existe data de los pedidos.</h4>  
+    </div>  
+  <table class="table" *ngIf="dataavailbale">  
+  <thead>  
+    <tr>  
+ 
+      <th scope="col">Cliente</th>  
+      <th scope="col">Fecha</th>  
+      <th scope="col">Valor Total</th>  
+      <th scope="col">Estado</th>  
+      <th scope="col">Prioridad</th>  
+      <th scope="col" style="align-content: center">Action</th>  
+    </tr>  
+  </thead>  
+  <tbody>  
+    
+      <tr *ngFor="let e of emplist ">
+      
+      <td scope="col">{{e.Cliente}}</td>  
+      <td scope="col">{{e.FechaRegistro}}</td>  
+      <td scope="col">{{e.ValorTotal}}</td>  
+      <td scope="col">{{e.EstadoPedido}}</td>  
+      <td scope="col">{{e.Prioridad}}</td>  
+      <td style="display:none">{{e.Id}}</td>  
+      <td scope="col">  
+        <button type="button" class="btn btn-default btn-danger" (click)="open(content); this.tempemp.Id = e.Id">  
+          <span class="glyphicon glyphicon-trash"></span> Cambiar Estado  
+        </button>   
+        
+
+      </td>  
+    </tr>  
+  </tbody>  
+    </table>    
+
+
+    <ng-template #content let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <div class="mb-3">
+            <label for="dateOfBirth">Date of birth</label>
+            <div class="input-group">
+              <select formControlName="estado" class="form-control" (change)="changeEstado($event)">
+
+                <option>Seleccione el estado</option>
+                <option *ngFor="let option of OptionList">{{option}}</option>
+            </select>
+              
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click'); submit();">Save</button>
+      </div>
+    </ng-template>
+<hr>
+
+<pre>{{ closeResult }}</pre>

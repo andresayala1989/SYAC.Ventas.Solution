@@ -96,6 +96,7 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="GetAllOrdenes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="VentasModelStoreContainer">
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrdenPedido" EntityType="Self.OrdenPedido" Schema="dbo" store:Type="Tables" />
@@ -173,6 +174,7 @@
             <End Role="OrdenPedidoDetalle" EntitySet="OrdenPedidoDetalle" />
           </AssociationSet>
           <FunctionImport Name="GetAllOrdenes" ReturnType="Collection(VentasModel.GetAllOrdenes_Result)" />
+          <FunctionImport Name="GetAllProducts" ReturnType="Collection(VentasModel.GetAllProducts_Result)" />
         </EntityContainer>
         <EntityType Name="Productos">
           <Key>
@@ -242,6 +244,15 @@
           <Property Type="Decimal" Name="ValorTotal" Nullable="false" Precision="19" />
           <Property Type="String" Name="EstadoPedido" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="75" />
+        </ComplexType>
+        <ComplexType Name="GetAllProducts_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="IdOrdenPedido" Nullable="false" />
+          <Property Type="Int32" Name="Cantidad" Nullable="false" />
+          <Property Type="Boolean" Name="Estado" Nullable="false" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="Decimal" Name="ValorParcial" Nullable="false" Precision="19" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="150" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -316,6 +327,19 @@
                 <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
                 <ScalarProperty Name="ValorTotal" ColumnName="ValorTotal" />
                 <ScalarProperty Name="EstadoPedido" ColumnName="EstadoPedido" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAllProducts" FunctionName="VentasModel.Store.GetAllProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VentasModel.GetAllProducts_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdOrdenPedido" ColumnName="IdOrdenPedido" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="ValorParcial" ColumnName="ValorParcial" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </ComplexTypeMapping>
             </ResultMapping>

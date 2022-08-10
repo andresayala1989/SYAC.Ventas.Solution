@@ -8,18 +8,26 @@ using SYAC.Ventas.BLL.DAO;
 namespace SYAC.Ventas.API.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [Route("api/Ordenes/Get", Name = "OrdenesApi")]
+    
     public class OrdenesController : ApiController
     {
 
         [HttpGet]
+        [Route("api/Ordenes/Get")]
         public List<OrdenPedidoViewModel> Get(DataSourceLoadOptions loadOptions) {
             List<OrdenPedidoViewModel> lstOrdenes= new List<OrdenPedidoViewModel>();
             lstOrdenes = OrdenesDAO.Instance.Get();
             return lstOrdenes;
         }
 
-
+        [HttpPut]
+        [Route("api/Ordenes/Put")]
+        public bool Put(int Id, string Estado)
+        {
+            
+            bool result = OrdenesDAO.Instance.Update(Id, Estado);
+            return result;
+        }
 
     }
 }
